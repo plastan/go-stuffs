@@ -197,6 +197,7 @@ func remove(root *Node, key int) *Node {
 			if temp == nil {
 				root = temp
 			}
+			return temp
 
 		} else {
 			// 2 child present
@@ -248,6 +249,56 @@ func remove(root *Node, key int) *Node {
 
 }
 
+func delete(root *Node, key int) *Node {
+
+	if root == nil {
+
+		return root
+	} else if root.key > key {
+		root.left = delete(root.left, key)
+	} else if root.key < key {
+		root.right = delete(root.right, key)
+	} else {
+		if root.left == nil && root.right == nil {
+			root = nil
+			return root
+		} else if root.left == nil {
+			root = root.right
+
+		} else if root.right == nil {
+			root = root.left
+		} else {
+			temp := nodeWithMinimumValue(root.right)
+			root.key = temp.key
+			root.right = delete(root.right, temp.key)
+
+		}
+
+	}
+	//
+	//	root.height = 1 + max(height(root.left), height(root.right))
+	//
+	//	balance := getBalanceFactor(root)
+	//
+	//	if balance > 1 && getBalanceFactor(root.left) >= 0 {
+	//		return rightRotate(root)
+	//	}
+	//
+	//	if balance > 1 && getBalanceFactor(root.left) < 0 {
+	//		root.left = leftRotate(root.left)
+	//		return rightRotate(root)
+	//	}
+	//	if balance < -1 && getBalanceFactor(root.right) >= 0 {
+	//		return leftRotate(root)
+	//	}
+	//	if balance < -1 && getBalanceFactor(root.right) < 0 {
+	//		root.right = rightRotate(root.right)
+	//		return leftRotate(root)
+	//	}
+	return root
+
+}
+
 // travers
 func preorder(n *Node) {
 	if n != nil {
@@ -293,7 +344,8 @@ func main() {
 	fmt.Println()
 	//	postorder(root)
 	//	fmt.Println()
-	//	remove(root, 2)
+	//remove(root, 8)
+	delete(root, 4)
 	prettyPrint(root, 0)
 	// printTree(root, "", true)
 }
